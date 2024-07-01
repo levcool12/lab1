@@ -1,0 +1,22 @@
+name: CMake
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Remove build directory
+      run: if [ -d build ]; then rm -rf build; fi
+
+    - name: Configure CMake
+      run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
+
+    - name: Build
+      run: cmake --build build --config Debug
+
+    - name: Run tests
+      run: cd build && ctest -C Debug --output-on-failure
